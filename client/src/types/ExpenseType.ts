@@ -10,7 +10,7 @@ interface Transaction {
   title: string;
   amount: number;
   type: "income" | "expense";
-  category: string;
+  category:  "food" | "shopping" | "bills" | "transport" | "work" | "freelance" | "other"; 
   date: string;
 }
 
