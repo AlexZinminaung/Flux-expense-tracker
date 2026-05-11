@@ -26,6 +26,7 @@ ChartJS.register(
   Filler
 );
 
+
 const data1 = {
   labels: ["Food", "Shopping", "Bills", "Transport"],
   datasets: [
@@ -69,15 +70,25 @@ const DataChart = () => {
 
     return (
         <div className='flex flex-wrap flex-col md:flex-row lg:flex-col gap-2'>
-          <div className='flex-1 component-card flex justify-center items-center'>
-            <Pie
-              data={data1}
-            />
-          </div>
+        <div className='flex-1 component-card min-w-0 flex justify-center items-center'>
+          <Pie
+            data={data1}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+            }}
+          />
+        </div>
 
-          <div className='flex-1 component-card flex justify-center items-center'>
-            <Line data={data2}/>
-          </div>
+        <div className='flex-1 component-card min-w-0 flex justify-center items-center'>
+          <Line
+            data={data2}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+            }}
+          />
+        </div>
 
           <div className='flex-1 component-card flex flex-col justify-center items-center'>
             <span className='text-start w-full p-2'>Monthly Summery</span>
