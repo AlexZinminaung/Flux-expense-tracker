@@ -75,7 +75,7 @@ function App() {
   return (
     <section className='container-main'>
       {/* Navbar */}
-      <nav className='w-full flex justify-between items-center border-b border-gray-800 py-8'>
+      <nav className='w-full flex flex-wrap gap-2 justify-between items-center border-b border-gray-800 py-8'>
         {/* For Logo */}
         <div className='flex flex-col'>
           <span className=' text-3xl font-bold bg-linear-to-r from-white to-blue-800 bg-clip-text text-transparent'>FLUX</span>
@@ -84,7 +84,7 @@ function App() {
         <span className=' bg-white/10 p-2 rounded-lg text-sm text-gray-400'>Sun, May 10, 2026</span>
       </nav>
 
-      <section className='w-full flex gap-3 py-4'>
+      <section className='w-full flex flex-col sm:flex-row gap-3 py-4'>
 
         <div className='flex-1 flex flex-col gap-2 component-card '>
           <div className='flex gap-2'>
@@ -123,7 +123,7 @@ function App() {
           </div>
 
           <div className='border-t border-gray-800 '>
-            <div className='py-2 flex gap-1'>
+            <div className='py-2 flex flex-col sm:flex-row gap-1'>
               <div className='flex gap-2 bg-white/10 w-fit p-1 rounded-lg'>
                 <button className='py-1 px-4'>All</button>
                 <button className='py-1 px-4'>Income</button>
