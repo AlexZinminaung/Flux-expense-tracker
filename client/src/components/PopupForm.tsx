@@ -5,11 +5,13 @@ type Props = {
 };
 
 
+
+
 const PopupForm = ({setFormOpen}: Props) => {
 
     return (
-        <div className='fixed inset-0 bg-black/30 z-50 flex justify-center items-center'>
-          <div className='bg-black component-card w-[90%] max-w-md'>
+        <div className='fixed inset-0 bg-black/80 z-50 flex justify-center items-center'>
+          <div className=' component-card w-[90%] max-w-md'>
             <div className='flex justify-between gap-2'>
               <span className=' font-bold'>New Transaction</span>
               <button onClick={() => { setFormOpen(false)}} className='size-6 p-2 border border-gray-800 rounded-lg flex justify-center items-center hover:bg-gray-400'>x</button>
@@ -25,18 +27,23 @@ const PopupForm = ({setFormOpen}: Props) => {
               <input type='text' className='p-2 outline-none border border-gray-800 rounded-lg'/>
 
               <div className='flex flex-col sm:flex-row gap-2'>
-                <div className='flex flex-col w-full'>
+                <div className='flex flex-col w-full gap-4'>
                   <label className=' text-sm text-gray-400'>AMOUNT ($)</label>
                   <input type='text' className='p-2 outline-none border border-gray-800 rounded-lg'/>
                 </div>
-                <div className='flex flex-col w-full'>
+                <div className='flex flex-col w-full gap-4'>
                   <label className=' text-sm text-gray-400'>DATE</label>
                   <input type='date' className='p-2 outline-none border border-gray-800 rounded-lg'/>
                 </div>
               </div>
 
-              <label>Catagory</label>
-              <input type='text' className='p-2 outline-none border border-gray-800 rounded-lg'/>
+              <label className=' text-sm text-gray-400'>CATEGORY</label>
+              <select className="p-2">
+                <option value="food">Food</option>
+                <option value="shopping">Shopping</option>
+                <option value="bills">Bills</option>
+                <option value="transport">Transport</option>
+              </select>
             </form>
           </div>
         </div>

@@ -11,11 +11,11 @@
 
 @layer components {
   .container-main {
-    @apply py-4 px-5 2xl:px-56 font-syne text-white bg-black;
+    @apply py-4 px-5 2xl:px-56 font-syne text-white bg-[#0b0e14];
   }
 
   .component-card {
-    @apply p-5 rounded-2xl border border-gray-800;
+    @apply p-5 rounded-2xl border border-[#1d212b] bg-[#11141d];
   }
 }
 

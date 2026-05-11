@@ -1,5 +1,7 @@
+import TransactionCard from "./TransactionCard";
+
 // import icons
-import { Hamburger } from "lucide-react";
+import { Search } from 'lucide-react';
 
 const TransactionContainer = () => {
 
@@ -18,73 +20,16 @@ const TransactionContainer = () => {
                 <button className='py-1 px-4'>Income</button>
                 <button className='py-1 px-4'>Expense</button>
               </div>
-              <form className='w-full rounded-lg border border-gray-800'>
-                <input type='text' className='w-full h-full'/>
+              <form className='w-full px-2 flex justify-center items-center rounded-lg border border-gray-800'>
+                <Search color="#00aaff" />
+                <input type='text' className='w-full h-full outline-none'/>
               </form>
             </div>
 
             {/* history container */}
             <div className='max-h-125 flex flex-col gap-2 overflow-y-auto'>
-              <div className='flex items-center justify-between border p-4 border-gray-800 rounded-lg '>
-                <div className='flex items-center gap-4'>
-                  <Hamburger color="#11ff00" />
-                  <div className='flex flex-col'>
-                    <span>Drink</span>
-                    <div className='flex text-sm text-gray-400 gap-2'>
-                      <span>May 10, 2026</span>
-                      <span>expense</span>
-                      <span>Food</span>
-                    </div>
-                  </div>
-                </div>
-                <span>$345</span>
-              </div>
-
-              <div className='flex items-center justify-between border p-4 border-gray-800 rounded-lg '>
-                <div className='flex items-center gap-4'>
-                  <Hamburger color="#11ff00" />
-                  <div className='flex flex-col'>
-                    <span>Drink</span>
-                    <div className='flex text-sm text-gray-400 gap-2'>
-                      <span>May 10, 2026</span>
-                      <span>expense</span>
-                      <span>Food</span>
-                    </div>
-                  </div>
-                </div>
-                <span>$345</span>
-              </div>
-
-              <div className='flex items-center justify-between border p-4 border-gray-800 rounded-lg '>
-                <div className='flex items-center gap-4'>
-                  <Hamburger color="#11ff00" />
-                  <div className='flex flex-col'>
-                    <span>Drink</span>
-                    <div className='flex text-sm text-gray-400 gap-2'>
-                      <span>May 10, 2026</span>
-                      <span>expense</span>
-                      <span>Food</span>
-                    </div>
-                  </div>
-                </div>
-                <span>$345</span>
-              </div>
-
-              <div className='flex items-center justify-between border p-4 border-gray-800 rounded-lg '>
-                <div className='flex items-center gap-4'>
-                  <Hamburger color="#11ff00" />
-                  <div className='flex flex-col'>
-                    <span>Drink</span>
-                    <div className='flex text-sm text-gray-400 gap-2'>
-                      <span>May 10, 2026</span>
-                      <span>expense</span>
-                      <span>Food</span>
-                    </div>
-                  </div>
-                </div>
-                <span>$345</span>
-              </div>
-
+              <TransactionCard/>
+              <TransactionCard/>
             </div>
           </div>
         </div>
