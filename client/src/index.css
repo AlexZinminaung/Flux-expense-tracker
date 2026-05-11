@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap');
+@import "tailwindcss";
+
+
+/* Adding font form google */
+@theme {
+  --font-syne: "Syne", sans-serif; 
+}
+
+/* Defind component class */
+
+@layer components {
+  .container-main {
+    @apply py-4 px-5 2xl:px-56 font-syne text-white bg-black;
+  }
+
+  .component-card {
+    @apply p-5 rounded-2xl border border-gray-800;
+  }
+}
+
+
+
