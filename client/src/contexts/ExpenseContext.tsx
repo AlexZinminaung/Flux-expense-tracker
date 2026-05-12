@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import type { ExpenseSummary, Transaction, Spending } from "../types/ExpenseType";
-
+import { db } from "../database/db";
 
 type ExpenseContextType = {
     expenseSummary: ExpenseSummary,
@@ -18,6 +18,17 @@ const ExpenseProvider = ({ children }: { children: React.ReactNode }) => {
     
     const [expenseSummary, setExpenseSummery] = useState<ExpenseSummary>({total_balance: 0, total_income: 0, total_expense: 0, income_transaction: 0, expense_transaction: 0})
     const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+
+    // fetch data from database
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            const data = await db.transactions.toArray();
+            setTransactions(data);
+        };
+
+        fetchTransactions();
+    }, [])
 
     // tracking expense data by catagory
     const spending = transactions.reduce((acc, transaction) => {
@@ -60,14 +71,17 @@ const ExpenseProvider = ({ children }: { children: React.ReactNode }) => {
 
 
     // handler function
-    const addTransaction = (transaction: Transaction) => {
+    const addTransaction = async (transaction: Transaction) => {
+        await db.transactions.add(transaction);
+
         setTransactions(prev => {
             return [...prev, transaction]
         })
+
     }
 
-    const removeTransaction = (transactionId: string) => {
-
+    const removeTransaction = async (transactionId: string) => {
+        await db.transactions.delete(transactionId);
         const filterTransaction = transactions.filter( record => {
             return record.id != transactionId
         })
