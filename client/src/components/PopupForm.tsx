@@ -1,4 +1,5 @@
 import { useReducer } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 // import type
 import type { Dispatch, SetStateAction } from "react";
@@ -16,6 +17,7 @@ type TransactionType = "income" | "expense";
 type TransactionCategory = "food" | "shopping" | "bills" | "transport" | "work" | "freelance" | "other"; 
 
 type Action =
+  | { type: "add_id"; payload: string}
   | { type: "change_type"; payload: TransactionType }
   | { type: "change_title"; payload: string }
   | { type: "change_amount"; payload: number }
@@ -23,7 +25,7 @@ type Action =
   | { type: "change_category"; payload: TransactionCategory };
 
 const initialState: Transaction = {
-  id: 0,
+  id: "",
   title: "",
   amount: 0,
   type: "income",
@@ -109,7 +111,21 @@ const PopupForm = ({setFormOpen}: Props) => {
     
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-      console.log(state);
+
+      // check if state empty
+      const {title, type, amount, category, date} = state || {}
+      if (!title?.trim() || !type?.trim() || amount == null || !category?.trim() || !date?.trim())
+      {
+        console.log('Data missing!')
+        return 
+      }
+      const newTransaction = {
+        ...state,
+        id: uuidv4(),
+      };
+      console.log(newTransaction);
+      addTransaction(newTransaction);
+      setFormOpen(false);
     }
 
     return (
@@ -117,31 +133,55 @@ const PopupForm = ({setFormOpen}: Props) => {
           <div className=' component-card w-[90%] max-w-md'>
             <div className='flex justify-between gap-2'>
               <span className=' font-bold'>New Transaction</span>
-              <button onClick={() => { setFormOpen(false)}} className='size-6 p-2 border border-gray-800 rounded-lg flex justify-center items-center hover:bg-gray-400'>x</button>
+              <button 
+                onClick={() => { setFormOpen(false)}} 
+                className='size-6 p-2 border border-gray-800 rounded-lg flex justify-center items-center hover:bg-gray-400'>
+                x
+              </button>
+
             </div>
 
             <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
               <label className=' text-sm text-gray-400'>TYPE</label>
               <div className='flex gap-2'>
-                <button onClick={() => { handleForm("type", "income") }} type="button" className={`flex-1 border px-2 py-1 rounded-lg ${state.type == 'income' ? 'border-green-400':  'border-gray-800'}`}>Income</button>
-                <button onClick={() => { handleForm("type", "expense") }} type="button"  className={`flex-1 border px-2 py-1 rounded-lg ${state.type == 'expense' ? 'border-green-400':  'border-gray-800'}`}>Expense</button>
+                <button 
+                  onClick={() => { handleForm("type", "income") }} type="button" 
+                  className={`flex-1 border px-2 py-1 rounded-lg ${state.type == 'income' ? 'border-green-400':  'border-gray-800'}`}>
+                  Income
+                </button>
+
+                <button 
+                  onClick={() => { handleForm("type", "expense") }} type="button"  
+                  className={`flex-1 border px-2 py-1 rounded-lg ${state.type == 'expense' ? 'border-green-400':  'border-gray-800'}`}>
+                  Expense
+                </button>
               </div>
+
               <label className=' text-sm text-gray-400'>TITLE</label>
-              <input value={state.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleForm("title", e.target.value)}} type='text' className='p-2 outline-none border border-gray-800 rounded-lg'/>
+              <input required 
+                value={state.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleForm("title", e.target.value)}} 
+                type='text' className='p-2 outline-none border border-gray-800 rounded-lg'/>
 
               <div className='flex flex-col sm:flex-row gap-2'>
                 <div className='flex flex-col w-full gap-4'>
                   <label className=' text-sm text-gray-400'>AMOUNT ($)</label>
-                  <input value={state.amount === 0 ? "" : state.amount} onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleForm("amount", e.target.value)}} type='number' className='p-2 outline-none border border-gray-800 rounded-lg'/>
+                  <input required 
+                    value={state.amount === 0 ? "" : state.amount} 
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleForm("amount", e.target.value)}} 
+                    type='number' className='p-2 outline-none border border-gray-800 rounded-lg   [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]'/>
                 </div>
                 <div className='flex flex-col w-full gap-4'>
                   <label className=' text-sm text-gray-400'>DATE</label>
-                  <input value={state.date} onChange={(e) => handleForm("date", e.target.value)} type='date' className='p-2 outline-none border border-gray-800 rounded-lg'/>
+                  <input required value={state.date} 
+                    onChange={(e) => handleForm("date", e.target.value)} 
+                    type='date' className='p-2 outline-none border text-white border-gray-800 rounded-lg [&::-webkit-calendar-picker-indicator]:invert'/>
                 </div>
               </div>
 
               <label className=' text-sm text-gray-400'>CATEGORY</label>
-              <select   value={state.category} onChange={(e) => handleForm("category", e.target.value)} className="p-2 outline-none border border-gray-800 rounded-lg">
+              <select required   
+                value={state.category} 
+                onChange={(e) => handleForm("category", e.target.value)} className="p-2 outline-none border border-gray-800 rounded-lg">
                 <option value="food">Food</option>
                 <option value="shopping">Shopping</option>
                 <option value="bills">Bills</option>
@@ -149,7 +189,6 @@ const PopupForm = ({setFormOpen}: Props) => {
                 <option value="work">Work</option>
                 <option value="freelance">Freelance</option>
                 <option value="other">Other</option>
-
               </select>
 
               {/* submit */}
