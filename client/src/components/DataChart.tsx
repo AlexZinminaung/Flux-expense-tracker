@@ -83,7 +83,7 @@ const DataChart = () => {
             data={data1}
             options={{
               responsive: true,
-              maintainAspectRatio: false,
+              maintainAspectRatio: true,
             }}
           />
         </div>
@@ -93,7 +93,7 @@ const DataChart = () => {
             data={data2}
             options={{
               responsive: true,
-              maintainAspectRatio: false,
+              maintainAspectRatio: true,
             }}
           />
         </div>
