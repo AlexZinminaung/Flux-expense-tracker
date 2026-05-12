@@ -163,19 +163,23 @@ const PopupForm = ({setFormOpen}: Props) => {
                 type='text' className='p-2 outline-none border border-gray-800 rounded-lg'/>
 
               <div className='flex flex-col sm:flex-row gap-2'>
+                
                 <div className='flex flex-col w-full gap-4'>
                   <label className=' text-sm text-gray-400'>AMOUNT ($)</label>
                   <input required 
                     value={state.amount === 0 ? "" : state.amount} 
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleForm("amount", e.target.value)}} 
+                    onKeyDown={(e) => { if (["e", "E", "+", "-"].includes(e.key)) { e.preventDefault()}}}
                     type='number' className='p-2 outline-none border border-gray-800 rounded-lg   [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]'/>
                 </div>
+
                 <div className='flex flex-col w-full gap-4'>
                   <label className=' text-sm text-gray-400'>DATE</label>
                   <input required value={state.date} 
                     onChange={(e) => handleForm("date", e.target.value)} 
                     type='date' className='p-2 outline-none border text-white border-gray-800 rounded-lg [&::-webkit-calendar-picker-indicator]:invert'/>
                 </div>
+
               </div>
 
               <label className=' text-sm text-gray-400'>CATEGORY</label>
