@@ -123,7 +123,6 @@ const PopupForm = ({setFormOpen}: Props) => {
         ...state,
         id: uuidv4(),
       };
-      console.log(newTransaction);
       addTransaction(newTransaction);
       setFormOpen(false);
     }

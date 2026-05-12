@@ -16,5 +16,16 @@ interface Transaction {
   date: string;
 }
 
+interface Spending {
+  food: number,
+  shopping: number,
+  bills: number,
+  transport: number,
+  freelance: number,
+  work: number,
+  other: number,
+}
 
-export type { ExpenseSummary , Transaction};
+
+
+export type { ExpenseSummary , Transaction, Spending };

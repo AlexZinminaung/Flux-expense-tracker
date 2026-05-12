@@ -13,7 +13,8 @@ import { ExpenseContext } from "../contexts/ExpenseContext";
 
 const TransactionContainer = () => {
   const [option, setOption] = useState('all');
-  
+  const [search, setSearch] = useState('');
+
   const context = useContext(ExpenseContext);
   if (!context) return null;
 
@@ -21,15 +22,15 @@ const TransactionContainer = () => {
   const filterTransactions = transactions.filter(transaction => {
     if (option == 'all')
     {
-      return transaction 
+      return transaction.title.toLowerCase().includes(search.toLowerCase().trim())
     }
 
     if (option == 'income')
     {
-      return transaction.type == 'income';
+      return transaction.type == 'income' && transaction.title.toLowerCase().includes(search.toLowerCase().trim());
     }
 
-    return transaction.type == 'expense';
+    return transaction.type == 'expense' && transaction.title.toLowerCase().includes(search.toLowerCase().trim());
   })
 
 
@@ -48,9 +49,9 @@ const TransactionContainer = () => {
               <button onClick={() => { setOption('income')}} className={`py-1 px-4 rounded-lg ${option == 'income' && 'bg-green-400'}`}>Income</button>
               <button onClick={() => { setOption('expense')}} className={`py-1 px-4 rounded-lg ${option == 'expense' && 'bg-green-400'}`}>Expense</button>
             </div>
-            <form className='w-full p-2 flex justify-center items-center rounded-lg border border-gray-800'>
-              <Search color="#00aaff" />
-              <input type='text' className='w-full h-full outline-none'/>
+            <form onSubmit={(e) => { e.preventDefault()}} className='w-full p-2 flex justify-center items-center rounded-lg border border-gray-800'>
+              <Search color="#00aaff"/>
+              <input onChange={(e) => { setSearch(e.target.value)}} type='text' className='w-full h-full outline-none'/>
             </form>
           </div>
 
@@ -70,7 +71,7 @@ const TransactionContainer = () => {
             {
               // if there is transcation
               filterTransactions.map( record => {
-                return < TransactionCard key={record.id} data={record}/>
+                return <TransactionCard key={record.id} data={record}/>
               })
             }
           </div>

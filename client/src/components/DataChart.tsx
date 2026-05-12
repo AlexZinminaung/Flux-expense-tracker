@@ -14,6 +14,9 @@ import {
 
 import { Pie, Line } from "react-chartjs-2";
 
+// import custom 
+import { useContext } from "react";
+import { ExpenseContext } from "../contexts/ExpenseContext";
 
 ChartJS.register(
   ArcElement,
@@ -27,46 +30,51 @@ ChartJS.register(
 );
 
 
-const data1 = {
-  labels: ["Food", "Shopping", "Bills", "Transport"],
-  datasets: [
-    {
-      data: [300, 500, 200, 120],
-      backgroundColor: [
-        "#22d3ee",
-        "#818cf8",
-        "#34d399",
-        "#f472b6",
-      ],
-      borderWidth: 0,
-    },
-  ],
-};
-
-const data2 = {
-  labels: ["Jan", "Feb", "Mar", "Apr"],
-  datasets: [
-    {
-      label: "Income",
-      data: [100, 700, 500, 900, 650],
-      borderColor: "#22d3ee",
-      backgroundColor: "rgba(34,211,238,0.2)",
-      tension: 0.4,
-      fill: true,
-    },
-    {
-      label: "Expenses",
-      data: [10, 440, 600, 1200, 850],
-      borderColor: "#e83b2e",
-      backgroundColor: "rgba(255, 107, 97,0.2)",
-      tension: 0.4,
-      fill: true,
-    },
-
-  ],
-};
-
 const DataChart = () => {
+  const context = useContext(ExpenseContext);
+  if (!context) return null;
+
+  const { spending } = context;
+  const data1 = {
+    labels: ["Food", "Shopping", "Bills", "Transport", "Freelance", "Other"],
+    datasets: [
+      {
+        data: [spending.food, spending.shopping, spending.bills, spending.transport, spending.freelance, spending.other],
+        backgroundColor: [
+          "#22d3ee",
+          "#818cf8",
+          "#34d399",
+          "#f472b6",
+          "#b7eb34",
+          "#c908c0",
+        ],
+        borderWidth: 0,
+      },
+    ],
+  };
+
+  const data2 = {
+    labels: ["Jan", "Feb", "Mar", "Apr"],
+    datasets: [
+      {
+        label: "Income",
+        data: [100, 700, 500, 900, 650],
+        borderColor: "#22d3ee",
+        backgroundColor: "rgba(34,211,238,0.2)",
+        tension: 0.4,
+        fill: true,
+      },
+      {
+        label: "Expenses",
+        data: [10, 440, 600, 1200, 850],
+        borderColor: "#e83b2e",
+        backgroundColor: "rgba(255, 107, 97,0.2)",
+        tension: 0.4,
+        fill: true,
+      },
+
+    ],
+  };
 
     return (
         <div className='flex flex-wrap flex-col md:flex-row lg:flex-col gap-2'>
