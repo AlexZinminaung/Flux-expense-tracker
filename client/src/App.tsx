@@ -16,7 +16,7 @@ function App() {
   const [isFormOpen, setFormOpen] = useState(false)
 
   return (
-    <section className='container-main'>
+    <section className='container-main min-h-screen'>
       <ExpenseProvider>
         {/* Navbar */}
         <Navbar/>
