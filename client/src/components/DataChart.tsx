@@ -126,7 +126,7 @@ const DataChart = () => {
 const NoData = () => {
 
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-center">
+    <div className="flex flex-col items-center justify-center py-20 text-center component-card">
       <div className="text-6xl mb-4">📊</div>
 
       <h1 className="text-2xl font-bold text-white">
