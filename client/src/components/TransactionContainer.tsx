@@ -43,7 +43,7 @@ const TransactionContainer = () => {
         </div>
 
         <div className='border-t border-gray-800 '>
-          <div className='py-2 flex flex-col sm:flex-row gap-1'>
+          <div className='py-2 flex flex-col sm:flex-row gap-2'>
             <div className='flex gap-2 bg-white/10 w-fit p-1 rounded-lg'>
               <button onClick={() => { setOption('all')}} className={`py-1 px-4 rounded-lg ${option == 'all' && 'bg-blue-400/20'}`}>All</button>
               <button onClick={() => { setOption('income')}} className={`py-1 px-4 rounded-lg ${option == 'income' && 'bg-blue-400/20'}`}>Income</button>
