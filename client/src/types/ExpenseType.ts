@@ -12,7 +12,7 @@ interface Transaction {
   title: string;
   amount: number;
   type: "income" | "expense";
-  category:  "food" | "shopping" | "bills" | "transport" | "work" | "freelance" | "other"; 
+  category:  "food" | "shopping" | "bills" | "transport"| "entertainment" | "salary" | "freelance" | "other"; 
   date: string;
 }
 
@@ -20,12 +20,19 @@ interface Spending {
   food: number,
   shopping: number,
   bills: number,
+  entertainment: number,
   transport: number,
   freelance: number,
-  work: number,
+  salary: number,
   other: number,
 }
 
+interface MonthlySummary {
+  month: string,
+  totalExpense: number,
+  totalIncome: number,
+  
+}
 
 
-export type { ExpenseSummary , Transaction, Spending };
+export type { ExpenseSummary , Transaction, Spending, MonthlySummary };

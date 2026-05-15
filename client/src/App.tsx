@@ -22,7 +22,7 @@ function App() {
         <Navbar/>
         {/* Overview */}
         <OverviewCard/>
-        <section className='flex flex-col lg:flex-row gap-2'>
+        <section className='flex flex-col lg:flex-row gap-3'>
           {/* Transaction  */}
           <TransactionContainer/>
           {/* Data chart */}

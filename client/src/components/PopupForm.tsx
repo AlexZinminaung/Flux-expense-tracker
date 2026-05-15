@@ -14,7 +14,7 @@ type Props = {
   setFormOpen: Dispatch<SetStateAction<boolean>>;
 };
 type TransactionType = "income" | "expense";
-type TransactionCategory = "food" | "shopping" | "bills" | "transport" | "work" | "freelance" | "other"; 
+type TransactionCategory = "food" | "shopping" | "bills" | "transport" | "entertainment" | "salary" | "freelance" | "other"; 
 
 type Action =
   | { type: "add_id"; payload: string}
@@ -24,13 +24,16 @@ type Action =
   | { type: "change_date"; payload: string }
   | { type: "change_category"; payload: TransactionCategory };
 
+// default date
+const todayDate = new Date().toISOString().split("T")[0];
+
 const initialState: Transaction = {
   id: "",
   title: "",
   amount: 0,
   type: "income",
   category: "food",
-  date: "",
+  date: todayDate,
 };
 
 
@@ -76,130 +79,132 @@ const reducer = (state: Transaction, action: Action): Transaction => {
 
 
 const PopupForm = ({setFormOpen}: Props) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
-    
-    const context = useContext(ExpenseContext);
-    if (!context) return null;
+  const [state, dispatch] = useReducer(reducer, initialState);
+  
 
-    const { addTransaction } = context;
+  const context = useContext(ExpenseContext);
+  if (!context) return null;
 
-    // handler function
-    const handleForm = ( field: "type" | "title" | "amount" | "date" | "category", value: string ) => {
-        switch (field) {
-          case "type":
-            dispatch({type: "change_type", payload: value as TransactionType});
-            break;
+  const { addTransaction } = context;
 
-          case "title":
-            dispatch({type: "change_title", payload: value});
-            break;
+  // handler function
+  const handleForm = ( field: "type" | "title" | "amount" | "date" | "category", value: string ) => {
+      switch (field) {
+        case "type":
+          dispatch({type: "change_type", payload: value as TransactionType});
+          break;
 
-          case "amount":
-            const amount = Number(value) || 0; 
-            dispatch({type: "change_amount", payload: amount});
-            break;
+        case "title":
+          dispatch({type: "change_title", payload: value});
+          break;
 
-          case "date":
-            dispatch({type: "change_date", payload: value});
-            break;
+        case "amount":
+          const amount = Number(value) || 0; 
+          dispatch({type: "change_amount", payload: amount});
+          break;
 
-          case "category":
-            dispatch({type: "change_category", payload: value as TransactionCategory});
-            break;
-        }
-      };
-    
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
+        case "date":
+          dispatch({type: "change_date", payload: value});
+          break;
 
-      // check if state empty
-      const {title, type, amount, category, date} = state || {}
-      if (!title?.trim() || !type?.trim() || amount == null || !category?.trim() || !date?.trim())
-      {
-        console.log('Data missing!')
-        return 
+        case "category":
+          dispatch({type: "change_category", payload: value as TransactionCategory});
+          break;
       }
-      const newTransaction = {
-        ...state,
-        id: uuidv4(),
-      };
-      addTransaction(newTransaction);
-      setFormOpen(false);
-    }
+    };
+  
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-    return (
-        <div className='fixed inset-0 bg-black/80 z-50 flex justify-center items-center'>
-          <div className=' component-card w-[90%] max-w-md'>
-            <div className='flex justify-between gap-2'>
-              <span className=' font-bold'>New Transaction</span>
+    // check if state empty
+    const {title, type, amount, category, date} = state || {}
+    if (!title?.trim() || !type?.trim() || amount == null || !category?.trim() || !date?.trim())
+    {
+      console.log('Data missing!')
+      return 
+    }
+    const newTransaction = {
+      ...state,
+      id: uuidv4(),
+    };
+    addTransaction(newTransaction);
+    setFormOpen(false);
+  }
+
+  return (
+      <div className='fixed inset-0 bg-black/80 z-50 flex justify-center items-center'>
+        <div className=' component-card w-[90%] max-w-md'>
+          <div className='flex justify-between gap-2'>
+            <span className=' font-bold'>New Transaction</span>
+            <button 
+              onClick={() => { setFormOpen(false)}} 
+              className='size-6 p-2 border border-gray-800 rounded-lg flex justify-center items-center hover:bg-gray-400'>
+              x
+            </button>
+
+          </div>
+
+          <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+            <label className=' text-sm text-gray-400'>TYPE</label>
+            <div className='flex gap-2'>
               <button 
-                onClick={() => { setFormOpen(false)}} 
-                className='size-6 p-2 border border-gray-800 rounded-lg flex justify-center items-center hover:bg-gray-400'>
-                x
+                onClick={() => { handleForm("type", "income") }} type="button" 
+                className={`flex-1 border px-2 py-1 rounded-lg ${state.type == 'income' ? 'border-green-400 bg-green-400/20 text-green-400':  'border-gray-800'}`}>
+                Income
               </button>
+
+              <button 
+                onClick={() => { handleForm("type", "expense") }} type="button"  
+                className={`flex-1 border px-2 py-1 rounded-lg ${state.type == 'expense' ? 'border-red-400 bg-red-400/20 text-red-400':  'border-gray-800'}`}>
+                Expense
+              </button>
+            </div>
+
+            <label className=' text-sm text-gray-400'>TITLE</label>
+            <input required 
+              value={state.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleForm("title", e.target.value)}} 
+              type='text' className='p-2 outline-none border border-gray-800 rounded-lg'/>
+
+            <div className='flex flex-col sm:flex-row gap-2'>
+              
+              <div className='flex flex-col w-full gap-4'>
+                <label className=' text-sm text-gray-400'>AMOUNT ($)</label>
+                <input required 
+                  value={state.amount === 0 ? "" : state.amount} 
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleForm("amount", e.target.value)}} 
+                  onKeyDown={(e) => { if (["e", "E", "+", "-"].includes(e.key)) { e.preventDefault()}}}
+                  type='number' className='p-2 outline-none border border-gray-800 rounded-lg   [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]'/>
+              </div>
+
+              <div className='flex flex-col w-full gap-4'>
+                <label className=' text-sm text-gray-400'>DATE</label>
+                <input required value={state.date}
+                  onChange={(e) => handleForm("date", e.target.value)} 
+                  type='date' className='p-2 outline-none border text-white border-gray-800 rounded-lg [&::-webkit-calendar-picker-indicator]:invert'/>
+              </div>
 
             </div>
 
-            <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-              <label className=' text-sm text-gray-400'>TYPE</label>
-              <div className='flex gap-2'>
-                <button 
-                  onClick={() => { handleForm("type", "income") }} type="button" 
-                  className={`flex-1 border px-2 py-1 rounded-lg ${state.type == 'income' ? 'border-green-400':  'border-gray-800'}`}>
-                  Income
-                </button>
+            <label className=' text-sm text-gray-400'>CATEGORY</label>
+            <select required   
+              value={state.category} 
+              onChange={(e) => handleForm("category", e.target.value)} className="p-2 outline-none border border-gray-800 rounded-lg">
+              <option value="food">🍔 Food</option>
+              <option value="shopping">🛒 Shopping</option>
+              <option value="bills">💡 Bills</option>
+              <option value="entertainment">🎬 Entertainment</option>
+              <option value="transport">🚗 Transport</option>
+              <option value="salary">💰 Salary</option>
+              <option value="freelance">🧑‍💻 Freelance</option>
+              <option value="other">📦 Other</option>
+            </select>
 
-                <button 
-                  onClick={() => { handleForm("type", "expense") }} type="button"  
-                  className={`flex-1 border px-2 py-1 rounded-lg ${state.type == 'expense' ? 'border-green-400':  'border-gray-800'}`}>
-                  Expense
-                </button>
-              </div>
-
-              <label className=' text-sm text-gray-400'>TITLE</label>
-              <input required 
-                value={state.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleForm("title", e.target.value)}} 
-                type='text' className='p-2 outline-none border border-gray-800 rounded-lg'/>
-
-              <div className='flex flex-col sm:flex-row gap-2'>
-                
-                <div className='flex flex-col w-full gap-4'>
-                  <label className=' text-sm text-gray-400'>AMOUNT ($)</label>
-                  <input required 
-                    value={state.amount === 0 ? "" : state.amount} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleForm("amount", e.target.value)}} 
-                    onKeyDown={(e) => { if (["e", "E", "+", "-"].includes(e.key)) { e.preventDefault()}}}
-                    type='number' className='p-2 outline-none border border-gray-800 rounded-lg   [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]'/>
-                </div>
-
-                <div className='flex flex-col w-full gap-4'>
-                  <label className=' text-sm text-gray-400'>DATE</label>
-                  <input required value={state.date} 
-                    onChange={(e) => handleForm("date", e.target.value)} 
-                    type='date' className='p-2 outline-none border text-white border-gray-800 rounded-lg [&::-webkit-calendar-picker-indicator]:invert'/>
-                </div>
-
-              </div>
-
-              <label className=' text-sm text-gray-400'>CATEGORY</label>
-              <select required   
-                value={state.category} 
-                onChange={(e) => handleForm("category", e.target.value)} className="p-2 outline-none border border-gray-800 rounded-lg">
-                <option value="food">Food</option>
-                <option value="shopping">Shopping</option>
-                <option value="bills">Bills</option>
-                <option value="transport">Transport</option>
-                <option value="work">Work</option>
-                <option value="freelance">Freelance</option>
-                <option value="other">Other</option>
-              </select>
-
-              {/* submit */}
-              <input className="p-2 bg-blue-500 rounded-lg" type="submit" value={'Add Transaction'}/>
-            </form>
-          </div>
+            {/* submit */}
+            <input className="p-2 bg-blue-500 rounded-lg" type="submit" value={'Add Transaction'}/>
+          </form>
         </div>
-    );
+      </div>
+  );
 }
 
 export default PopupForm;

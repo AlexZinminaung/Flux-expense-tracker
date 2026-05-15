@@ -45,9 +45,9 @@ const TransactionContainer = () => {
         <div className='border-t border-gray-800 '>
           <div className='py-2 flex flex-col sm:flex-row gap-1'>
             <div className='flex gap-2 bg-white/10 w-fit p-1 rounded-lg'>
-              <button onClick={() => { setOption('all')}} className={`py-1 px-4 rounded-lg ${option == 'all' && 'bg-green-400'}`}>All</button>
-              <button onClick={() => { setOption('income')}} className={`py-1 px-4 rounded-lg ${option == 'income' && 'bg-green-400'}`}>Income</button>
-              <button onClick={() => { setOption('expense')}} className={`py-1 px-4 rounded-lg ${option == 'expense' && 'bg-green-400'}`}>Expense</button>
+              <button onClick={() => { setOption('all')}} className={`py-1 px-4 rounded-lg ${option == 'all' && 'bg-blue-400/20'}`}>All</button>
+              <button onClick={() => { setOption('income')}} className={`py-1 px-4 rounded-lg ${option == 'income' && 'bg-blue-400/20'}`}>Income</button>
+              <button onClick={() => { setOption('expense')}} className={`py-1 px-4 rounded-lg ${option == 'expense' && 'bg-blue-400/20'}`}>Expense</button>
             </div>
             <form onSubmit={(e) => { e.preventDefault()}} className='w-full p-2 flex justify-center items-center rounded-lg border border-gray-800'>
               <Search color="#00aaff"/>
@@ -72,7 +72,7 @@ const TransactionContainer = () => {
               // if there is transcation
               filterTransactions.map( record => {
                 return <TransactionCard key={record.id} data={record}/>
-              })
+              }).reverse()
             }
           </div>
         </div>

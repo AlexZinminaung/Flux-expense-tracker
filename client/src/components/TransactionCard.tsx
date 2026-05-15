@@ -1,5 +1,3 @@
-// import icons
-import { Hamburger } from "lucide-react";
 import type { Transaction } from "../types/ExpenseType";
 
 type Props = {
@@ -15,15 +13,52 @@ const TransactionCard = ({data}: Props) => {
     if (!context) return null;
 
     const { removeTransaction } = context;
+    
+    let emoji = '';
+    switch (data.category) {
+      case 'food':
+        emoji = '🍔';
+        break;
+      case 'shopping':
+        emoji = '🛒';
+        break;
+      case 'bills':
+        emoji = '💡';
+        break;
+      case 'entertainment':
+        emoji = '🎬';
+        break;
+      case 'transport':
+        emoji = '🚗';
+        break;
+      case 'salary':
+        emoji = '💰';
+        break;
+      case 'freelance':
+        emoji = '🧑‍💻';
+        break;
+      case 'other':
+        emoji = '📦';
+        break;
+      default:
+        emoji = '❓';
+        break;
+    }
+
+    const formattedDate = new Date(data.date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
 
     return (
             <div className='flex items-center justify-between border p-4 border-gray-800 rounded-lg '>
                 <div className='flex items-center gap-4'>
-                  <Hamburger color="#11ff00" />
+                  <span>{emoji}</span>
                   <div className='flex flex-col'>
                     <span>{data.title}</span>
                     <div className='flex text-sm flex-wrap text-gray-400 gap-2'>
-                      <span>{data.date}</span>
+                      <span>{formattedDate}</span>
                       <span>{data.type}</span>
                       <span>{data.category}</span>
                     </div>
