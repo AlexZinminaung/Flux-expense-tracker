@@ -49,6 +49,7 @@ type Category = {
   name: CategoryName;
   amount: number;
   icon: string;
+  used: number;
 };
 
 

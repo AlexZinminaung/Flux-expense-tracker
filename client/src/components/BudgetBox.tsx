@@ -5,6 +5,7 @@ import { ExpenseContext } from "../contexts/ExpenseContext";
 
 import type { Category } from "../types/ExpenseType";
 
+
 type Action =
   | { type: "change_food"; payload: number }
   | { type: "change_shopping"; payload: number }
@@ -92,16 +93,15 @@ const reducer = (state: Category[], action: Action): Category[] => {
 
 
 const categoryIndex: Category[] = [
-  { id: 1, name: "food", amount: 0, icon: "🍔" },
-  { id: 2, name: "shopping", amount: 0, icon: "🛍️" },
-  { id: 3, name: "bills", amount: 0, icon: "📄" },
-  { id: 4, name: "entertainment", amount: 0, icon: "🎮" },
-  { id: 5, name: "transport", amount: 0, icon: "🚌" },
-  { id: 6, name: "freelance", amount: 0, icon: "💻" },
-  { id: 7, name: "salary", amount: 0, icon: "💰" },
-  { id: 8, name: "other", amount: 0, icon: "📦" },
+  { id: 1, name: "food", amount: 0, used: 0, icon: "🍔" },
+  { id: 2, name: "shopping", amount: 0, used: 0, icon: "🛍️" },
+  { id: 3, name: "bills", amount: 0, used: 0, icon: "📄" },
+  { id: 4, name: "entertainment", amount: 0, used: 0, icon: "🎮" },
+  { id: 5, name: "transport", amount: 0, used: 0, icon: "🚌" },
+  { id: 6, name: "freelance", amount: 0, used: 0, icon: "💻" },
+  { id: 7, name: "salary", amount: 0, used: 0, icon: "💰" },
+  { id: 8, name: "other", amount: 0, used: 0, icon: "📦" },
 ];
-
 
 
 
@@ -109,9 +109,13 @@ const BudgetBox = () => {
     const context = useContext(ExpenseContext);
     if (!context) return null;
 
-    const { toggleBudgetBox, categories, createPlan } = context;
-
+    const { toggleBudgetBox, categories, createPlan, spending } = context;
     const [state, dispatch] = useReducer(reducer, categories);
+
+    const totalBudget = state.reduce((acc, item) => acc + item.amount, 0)
+    const totalSpending = Object.values(spending).reduce(
+        (sum, value) => sum + value, 0
+     );
 
     // handler 
 
@@ -191,8 +195,7 @@ const BudgetBox = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('Submit')
-        console.log(state)
+        createPlan(state);
     }
 
     return (
@@ -211,16 +214,30 @@ const BudgetBox = () => {
                 <div className=" component-card flex flex-col gap-4">
                     <h1 className="w-full text-sm text-gray-400">📅 This Month's Overview </h1>
                     <div className="flex justify-between text-sm">
-                        <span className=" text-gray-400">Total Budget</span><span className="text-blue-400">$ 0.0</span>
+                        <span className=" text-gray-400">Total Budget</span><span className="text-blue-400">${totalBudget}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                        <span className=" text-gray-400">Spend This Month</span><span className="text-red-400">$ 0.0</span>
+                        <span className=" text-gray-400">Spend This Month</span><span className="text-red-400">$ {totalSpending}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                        <span className=" text-gray-400">Remaining</span><span className="text-green-400">$ 0.0</span>
+                        <span className=" text-gray-400">Remaining</span><span className="text-green-400">$ {totalBudget - totalSpending}</span>
                     </div>
 
-                    {/* Add dynamic web */}
+                    {/* Add dynamic web progress bar */}
+                    {
+                        state.map( category => {
+                            if (category.amount <= 0) return null;
+                            const percent = (category.used / category.amount) * 100; 
+                            return (
+                                <div key={category.id} className=" relative text-xm text-gray-400">
+                                    <span>{category.name}</span>
+                                    <span className="block w-full h-1 bg-gray-800 rounded-2xl"></span>
+                                    <span className="absolute bottom-0 block w-full h-1 bg-green-400 rounded-2xl" style={{width: `${percent <= 100 ? percent : 100}%`}}></span>
+                                </div>
+                            )
+                        })
+                    }
+
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-2">
@@ -231,10 +248,9 @@ const BudgetBox = () => {
                                 <li key={category.id} className="w-full flex justify-between">
                                     <span>{category.icon} {category.name}</span>
                                     <div className="flex gap-2 items-center">
-                                        <input onChange={ (e) => { handleInput(category.name, e.target.value) }} value={category.amount === 0 ? "" : category.amount} placeholder="$0.0" className=" border border-gray-800 rounded-lg p-2"/>
-                                        <button onClick={() => { removeCategory(category.id)}} className=" size-8 text-xs border border-gray-800 rounded-lg">❌</button>
+                                        <input onChange={ (e) => { handleInput(category.name, e.target.value) }} type="number" value={category.amount === 0 ? "" : category.amount} placeholder="$0.0" className=" border border-gray-800 rounded-lg p-2"/>
+                                        <button onClick={() => { removeCategory(category.id)}} type="button" className=" size-8 text-xs border border-gray-800 rounded-lg">❌</button>
                                     </div>
-
                                 </li>
                                 )
                         })

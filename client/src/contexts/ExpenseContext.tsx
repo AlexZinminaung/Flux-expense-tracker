@@ -25,14 +25,25 @@ const ExpenseProvider = ({ children }: { children: React.ReactNode }) => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isBudgetOpen, setBudgetOpen] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
+
     // fetch data from database
     useEffect(() => {
-        const fetchTransactions = async () => {
-            const data = await db.transactions.toArray();
-            setTransactions(data);
-        };
+  const loadData = async () => {
+        try {
+            const [transactions, categories] = await Promise.all([
+                db.transactions.toArray(),
+                db.categories.toArray(),
+            ]);
 
-        fetchTransactions();
+            setTransactions(transactions);
+            setCategories(categories);
+            } catch (error) {
+            console.error("Failed to load DB data:", error);
+            }
+        }
+
+
+        loadData()
     }, [])
 
     // tracking expense data by catagory
@@ -98,6 +109,34 @@ const ExpenseProvider = ({ children }: { children: React.ReactNode }) => {
                             expense_transaction: total_expense_transaction,
                         });
 
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
+        const currentTransactions = transactions.filter(record => {
+            if (record.type == 'income') return ;
+            const date = new Date(record.date);
+
+            return (
+                date.getMonth() + 1 === currentMonth &&
+                date.getFullYear() === currentYear
+            );
+        });
+
+        setCategories(prev => {
+            return prev.map(category => {
+                const totalUsed = currentTransactions
+                .filter(t => t.category === category.name)
+                .reduce((sum, t) => sum + t.amount, 0);
+
+                return {
+                ...category,
+                used: totalUsed,
+                };
+            });
+        });
+
+    
+
     }, [transactions])
 
 
@@ -124,9 +163,10 @@ const ExpenseProvider = ({ children }: { children: React.ReactNode }) => {
         setTransactions(filterTransaction);
     }
 
-    const createPlan = (data: Category[]) => {
-
+    const createPlan = async (data: Category[]) => {
+        await db.categories.bulkPut(data);
         setCategories(data);
+        
     }
 
     return (
