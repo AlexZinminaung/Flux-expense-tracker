@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import type { ExpenseSummary, Transaction, Spending, MonthlySummary } from "../types/ExpenseType";
+import type { ExpenseSummary, Transaction, Spending, MonthlySummary, Category } from "../types/ExpenseType";
 import { db } from "../database/db";
 
 type ExpenseContextType = {
@@ -7,9 +7,13 @@ type ExpenseContextType = {
     transactions: Transaction[],
     spending: Spending,
     monthlySummary: MonthlySummary[],
+    isBudgetOpen: boolean,
+    categories: Category[],
     // adding context fuction
     addTransaction: (transaction: Transaction) => void;
     removeTransaction: (transactionId: string) => void;
+    toggleBudgetBox: (option: boolean) => void;
+    createPlan: (data: Category[]) => void;
 }
 
 export const ExpenseContext = createContext<ExpenseContextType | null>(null);
@@ -19,7 +23,8 @@ const ExpenseProvider = ({ children }: { children: React.ReactNode }) => {
     
     const [expenseSummary, setExpenseSummery] = useState<ExpenseSummary>({total_balance: 0, total_income: 0, total_expense: 0, income_transaction: 0, expense_transaction: 0})
     const [transactions, setTransactions] = useState<Transaction[]>([]);
-
+    const [isBudgetOpen, setBudgetOpen] = useState(false);
+    const [categories, setCategories] = useState<Category[]>([]);
     // fetch data from database
     useEffect(() => {
         const fetchTransactions = async () => {
@@ -106,6 +111,10 @@ const ExpenseProvider = ({ children }: { children: React.ReactNode }) => {
 
     }
 
+    const toggleBudgetBox = (option: boolean) => {
+        setBudgetOpen(option);
+    }
+
     const removeTransaction = async (transactionId: string) => {
         await db.transactions.delete(transactionId);
         const filterTransaction = transactions.filter( record => {
@@ -115,8 +124,15 @@ const ExpenseProvider = ({ children }: { children: React.ReactNode }) => {
         setTransactions(filterTransaction);
     }
 
+    const createPlan = (data: Category[]) => {
+
+        setCategories(data);
+    }
+
     return (
-        <ExpenseContext.Provider value={{expenseSummary, transactions, addTransaction, removeTransaction, spending, monthlySummary}}>
+        <ExpenseContext.Provider value={{   expenseSummary, transactions, spending, monthlySummary, isBudgetOpen, categories, 
+                                            addTransaction, removeTransaction, toggleBudgetBox, createPlan
+                                        }}>
             {children}
         </ExpenseContext.Provider>
     );

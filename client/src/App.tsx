@@ -8,16 +8,22 @@ import DataChart from './components/DataChart';
 import Navbar from './components/Navbar';
 import OverviewCard from './components/OverviewCard';
 import TransactionContainer from './components/TransactionContainer';
-import ExpenseProvider from './contexts/ExpenseContext';
 import PopupForm from './components/PopupForm';
 
+// import custom 
+import { useContext } from "react";
+import { ExpenseContext } from "./contexts/ExpenseContext";
+import BudgetBox from './components/BudgetBox';
 
 function App() {
   const [isFormOpen, setFormOpen] = useState(false)
+  const context = useContext(ExpenseContext);
+  if (!context) return null;
+
+  const { isBudgetOpen } = context;
 
   return (
     <section className='container-main min-h-screen'>
-      <ExpenseProvider>
         {/* Navbar */}
         <Navbar/>
         {/* Overview */}
@@ -34,7 +40,11 @@ function App() {
         {
           isFormOpen && <PopupForm setFormOpen={setFormOpen}/>
         }
-      </ExpenseProvider>
+
+        {/* Open Budget box */}
+        {
+          isBudgetOpen && <BudgetBox/>
+        }
     </section>
   )
   

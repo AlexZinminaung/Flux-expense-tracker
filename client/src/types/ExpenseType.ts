@@ -34,5 +34,23 @@ interface MonthlySummary {
   
 }
 
+type CategoryName =
+  | "food"
+  | "shopping"
+  | "bills"
+  | "entertainment"
+  | "transport"
+  | "freelance"
+  | "salary"
+  | "other";
 
-export type { ExpenseSummary , Transaction, Spending, MonthlySummary };
+type Category = {
+  id: number,
+  name: CategoryName;
+  amount: number;
+  icon: string;
+};
+
+
+
+export type { ExpenseSummary , Transaction, Spending, MonthlySummary, Category };
