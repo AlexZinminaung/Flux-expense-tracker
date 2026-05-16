@@ -245,7 +245,7 @@ const BudgetBox = () => {
                     {
                         state.map( category => {
                             return (                 
-                                <li key={category.id} className="w-full flex justify-between">
+                                <li key={category.id} className="w-full flex justify-between items-center">
                                     <span>{category.icon} {category.name}</span>
                                     <div className="flex gap-2 items-center">
                                         <input onChange={ (e) => { handleInput(category.name, e.target.value) }} type="number" value={category.amount === 0 ? "" : category.amount} placeholder="$0.0" className=" border border-gray-800 rounded-lg p-2"/>

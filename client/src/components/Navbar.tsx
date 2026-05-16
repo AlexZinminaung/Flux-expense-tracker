@@ -2,6 +2,13 @@
 import { useContext } from "react";
 import { ExpenseContext } from "../contexts/ExpenseContext";
 
+const now = new Date().toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+
+
 const Navbar = () => {
     const context = useContext(ExpenseContext);
     if (!context) return null;
@@ -17,7 +24,7 @@ const Navbar = () => {
             </div>
             <div className="flex gap-2">
                 <button onClick={ () => {toggleBudgetBox(true)}} className=' bg-white/10 p-2 rounded-lg text-sm text-gray-400 border border-gray-400' >Budget</button>
-                <span className=' bg-white/10 p-2 rounded-lg text-sm text-gray-400 '>Sun, May 10, 2026</span>
+                <span className=' bg-white/10 p-2 rounded-lg text-sm text-gray-400 '>{now}</span>
             </div>
         </nav>
     )
