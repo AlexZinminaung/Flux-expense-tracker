@@ -14,8 +14,8 @@ export default defineConfig({
           enabled: true,
         },
         manifest: {
-          name: "Expense Tracker",
-          short_name: "Expenses",
+          name: "Flux Expense Tracker",
+          short_name: "Flux",
           start_url: "/",
           display: "standalone",
           theme_color: "#000000",

@@ -155,6 +155,11 @@ const ExpenseProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const removeTransaction = async (transactionId: string) => {
+        const confirmed = window.confirm("Are you sure you want to delete this item?");
+
+        // if user cancle action do nothing
+        if (!confirmed) return ;
+
         await db.transactions.delete(transactionId);
         const filterTransaction = transactions.filter( record => {
             return record.id != transactionId

@@ -39,7 +39,7 @@ const TransactionContainer = () => {
       <div className='w-full h-fit component-card'>
         <div className='py-4 flex justify-between'>
           <span className=' text-sm font-bold'>Transaction History</span>
-          <span className=' text-xs'>9 records</span>
+          <span className=' text-xs'>{transactions.length} records</span>
         </div>
 
         <div className='border-t border-gray-800 '>

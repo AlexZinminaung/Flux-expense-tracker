@@ -186,6 +186,10 @@ const BudgetBox = () => {
     }
 
     const removeCategory = (categoryId: number) => {
+        const confirmed = window.confirm("Are you sure you want to delete this item?");
+        // if user cancle action do nothing
+        if (!confirmed) return ;
+
         dispatch({
             type: "remove_category",
             payload: categoryId,
@@ -196,6 +200,7 @@ const BudgetBox = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         createPlan(state);
+        alert("Changes saved successfully");
     }
 
     return (
